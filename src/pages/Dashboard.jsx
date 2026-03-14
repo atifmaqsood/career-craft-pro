@@ -152,7 +152,8 @@ const ResumeCard = ({ resume, onDelete, delay = 0 }) => {
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { profile, analytics } = useSelector(state => state.user);
+  const { user } = useSelector(state => state.auth);
+  const { analytics } = useSelector(state => state.user);
   const [resumes, setResumes] = useState([]);
   const [isImporting, setIsImporting] = useState(false);
 
@@ -165,7 +166,7 @@ const Dashboard = () => {
       id: crypto.randomUUID(),
       title: 'My New Resume',
       templateId: 'modern',
-      basics: { name: profile.name, email: profile.email, phone: '', location: '', summary: '', title: '' },
+      basics: { name: user?.name || '', email: user?.email || '', phone: '', location: '', summary: '', title: '' },
       sections: [
         { id: 'basics', title: 'Personal Info', type: 'basics' },
         { id: 'experience', title: 'Experience', type: 'list', items: [] },
@@ -222,7 +223,7 @@ const Dashboard = () => {
             </span>
           </div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-            {greeting}, {profile.name?.split(' ')[0]}! 👋
+            {greeting}, {user?.name?.split(' ')[0]}! 👋
           </h1>
           <p className="text-slate-500 mt-1.5 text-sm">Your professional toolkit is ready. Let's build something great.</p>
         </div>

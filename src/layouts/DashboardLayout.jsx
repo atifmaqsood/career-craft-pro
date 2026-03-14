@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { 
   LayoutDashboard, 
   FileEdit, 
@@ -12,7 +13,7 @@ import {
   Search,
   Crown
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -42,6 +43,7 @@ const SidebarLink = ({ to, icon: Icon, label, active }) => (
 const DashboardLayout = () => {
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
+  const { user } = useSelector(state => state.auth);
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
@@ -115,7 +117,7 @@ const DashboardLayout = () => {
           <div className="flex items-center gap-2 text-sm text-slate-400">
             <span className="text-slate-600 font-medium">CareerCraft Pro</span>
             <ChevronRight size={14} />
-            <span className="capitalize">{location.pathname === '/' ? 'Dashboard' : location.pathname.split('/')[1]}</span>
+            <span className="capitalize">{location.pathname === '/' ? 'Dashboard' : location.pathname.split('/')[1]?.replace('-', ' ')}</span>
           </div>
           <div className="flex items-center gap-2">
             <button className="relative p-2 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors">
@@ -123,10 +125,16 @@ const DashboardLayout = () => {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-500 border-2 border-white" />
             </button>
             <div className="flex items-center gap-2 ml-2 pl-3 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white text-xs font-bold shadow-md">
-                A
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white text-xs font-bold shadow-md overflow-hidden ring-2 ring-slate-50">
+                {user?.photo ? (
+                  <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  user?.name?.charAt(0) || 'A'
+                )}
               </div>
-              <span className="text-sm font-semibold text-slate-700 hidden sm:block">Atif M.</span>
+              <span className="text-sm font-semibold text-slate-700 hidden sm:block">
+                {user?.name?.split(' ')[0] || 'User'}
+              </span>
             </div>
           </div>
         </header>
