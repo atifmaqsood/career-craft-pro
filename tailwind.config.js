@@ -46,11 +46,13 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
       },
       boxShadow: {
-        'premium': '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
-        'premium-hover': '0 20px 50px -12px rgba(0, 0, 0, 0.15)',
+        'premium': '0 1px 3px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.04)',
+        'premium-hover': '0 4px 6px rgba(0,0,0,0.04), 0 20px 40px rgba(0,0,0,0.08)',
+        'glow': '0 0 20px rgba(14,165,233,0.2)',
+        'glow-violet': '0 0 20px rgba(139,92,246,0.2)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',

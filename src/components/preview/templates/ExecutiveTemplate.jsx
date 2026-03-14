@@ -14,13 +14,19 @@ const ExecutiveTemplate = ({ data }) => {
         <h1 className="text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none">{basics.name}</h1>
         <div className="flex justify-between items-end mt-8">
           <p className="text-2xl font-light text-slate-500 max-w-md italic">{basics.title}</p>
-          <div className="text-right space-y-1">
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-[.25em]">{basics.location}</p>
-            <p className="text-sm font-medium text-slate-800">{basics.email}</p>
-            <p className="text-sm font-medium text-slate-800">{basics.phone}</p>
+          <div className="flex items-end gap-5">
+            <div className="text-right space-y-1">
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-[.25em]">{basics.location}</p>
+              <p className="text-sm font-medium text-slate-800">{basics.email}</p>
+              <p className="text-sm font-medium text-slate-800">{basics.phone}</p>
+            </div>
+            {basics.photo && (
+              <img src={basics.photo} alt={basics.name} className="w-20 h-20 rounded-full object-cover border-4 border-slate-100 shadow-xl" />
+            )}
           </div>
         </div>
       </div>
+
 
       <div className="space-y-16">
         <section>

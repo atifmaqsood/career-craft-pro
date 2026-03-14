@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   User, 
@@ -8,7 +8,9 @@ import {
   Code2, 
   Plus,
   Trash2,
-  GripVertical
+  GripVertical,
+  Camera,
+  X
 } from 'lucide-react';
 import { 
   DndContext, 
@@ -90,7 +92,81 @@ const SectionHeader = ({ id, title, icon: Icon, onRemove }) => (
   </div>
 );
 
+/* ── Photo-aware Basics Section ──────────────────────────────── */
+const BasicsSection = ({ basics, onChange }) => {
+  const photoRef = useRef();
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onChange('photo', reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Photo Upload */}
+      <div className="flex items-center gap-5">
+        <div className="relative shrink-0">
+          {basics.photo
+            ? <img src={basics.photo} alt="Profile" className="w-20 h-20 rounded-full object-cover border-4 border-slate-100 shadow" />
+            : <div className="w-20 h-20 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center border-4 border-slate-100 shadow">
+                <User size={28} className="text-slate-400" />
+              </div>
+          }
+          <button onClick={() => photoRef.current.click()}
+            className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-primary-700 transition-colors"
+          >
+            <Camera size={13} />
+          </button>
+          {basics.photo && (
+            <button onClick={() => onChange('photo', '')}
+              className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white shadow hover:bg-red-600 transition-colors"
+            >
+              <X size={10} />
+            </button>
+          )}
+          <input ref={photoRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+        </div>
+        <div>
+          <p className="text-sm font-bold text-slate-700">Profile Photo</p>
+          <p className="text-xs text-slate-400 mt-0.5">JPG, PNG or WebP. Max 2MB.<br/>Appears on compatible templates.</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="col-span-2">
+          <label className="label">Full Name</label>
+          <input type="text" value={basics.name} onChange={e => onChange('name', e.target.value)} className="input-field" placeholder="e.g. John Doe" />
+        </div>
+        <div className="col-span-2">
+          <label className="label">Job Title / Headline</label>
+          <input type="text" value={basics.title || ''} onChange={e => onChange('title', e.target.value)} className="input-field" placeholder="e.g. Senior Software Engineer" />
+        </div>
+        <div>
+          <label className="label">Email</label>
+          <input type="email" value={basics.email} onChange={e => onChange('email', e.target.value)} className="input-field" placeholder="john@example.com" />
+        </div>
+        <div>
+          <label className="label">Phone</label>
+          <input type="tel" value={basics.phone} onChange={e => onChange('phone', e.target.value)} className="input-field" placeholder="+1 (555) 000-0000" />
+        </div>
+        <div className="col-span-2">
+          <label className="label">Location</label>
+          <input type="text" value={basics.location || ''} onChange={e => onChange('location', e.target.value)} className="input-field" placeholder="City, Country" />
+        </div>
+        <div className="col-span-2">
+          <label className="label">Professional Summary</label>
+          <textarea rows={4} value={basics.summary} onChange={e => onChange('summary', e.target.value)} className="input-field resize-none" placeholder="Write a compelling 2-3 sentence summary..." />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const EditorForm = () => {
+
   const dispatch = useDispatch();
   const { currentResume } = useSelector(state => state.resume);
   const { basics, sections } = currentResume;
@@ -123,50 +199,7 @@ const EditorForm = () => {
   const renderSectionContent = (section) => {
     switch (section.id) {
       case 'basics':
-        return (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
-              <input 
-                type="text" 
-                value={basics.name}
-                onChange={(e) => handleBasicsChange('name', e.target.value)}
-                className="input-field" 
-                placeholder="e.g. John Doe"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
-              <input 
-                type="email" 
-                value={basics.email}
-                onChange={(e) => handleBasicsChange('email', e.target.value)}
-                className="input-field" 
-                placeholder="john@example.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Phone</label>
-              <input 
-                type="tel" 
-                value={basics.phone}
-                onChange={(e) => handleBasicsChange('phone', e.target.value)}
-                className="input-field" 
-                placeholder="+1 (555) 000-0000"
-              />
-            </div>
-            <div className="col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Summary</label>
-              <textarea 
-                rows={4}
-                value={basics.summary}
-                onChange={(e) => handleBasicsChange('summary', e.target.value)}
-                className="input-field resize-none" 
-                placeholder="Professional summary..."
-              />
-            </div>
-          </div>
-        );
+        return <BasicsSection basics={basics} onChange={handleBasicsChange} />;
       case 'experience':
         return (
           <div className="space-y-6">

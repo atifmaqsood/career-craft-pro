@@ -1,10 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --primary: 14 165 233;
+    --accent:  139 92 246;
+  }
+  
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
   body {
-    @apply font-sans;
+    @apply font-sans bg-slate-50 text-slate-900;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -13,59 +25,162 @@
 }
 
 @layer components {
+
+  /* ── Buttons ──────────────────────────────────────────────── */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all active:scale-95 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+           bg-primary-600 text-white shadow-lg shadow-primary-500/30
+           hover:bg-primary-500 hover:shadow-primary-400/40 hover:-translate-y-px
+           active:scale-95 active:translate-y-0
+           transition-all duration-200
+           disabled:opacity-50 disabled:pointer-events-none;
   }
-  
+
   .btn-secondary {
-    @apply bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium py-2 px-4 rounded-lg transition-all active:scale-95 shadow-sm hover:shadow-md disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+           bg-white text-slate-700 border border-slate-200 shadow-sm
+           hover:bg-slate-50 hover:border-slate-300 hover:-translate-y-px hover:shadow-md
+           active:scale-95 active:translate-y-0
+           transition-all duration-200
+           disabled:opacity-50 disabled:pointer-events-none;
   }
-  
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm
+           text-slate-500 hover:bg-slate-100 hover:text-slate-900
+           active:scale-95
+           transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+           bg-red-50 text-red-600 border border-red-100
+           hover:bg-red-600 hover:text-white hover:border-red-600 hover:-translate-y-px
+           active:scale-95 active:translate-y-0
+           transition-all duration-200;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm;
+  }
+
   .card-premium {
-    @apply bg-white border border-slate-100 rounded-2xl shadow-premium hover:shadow-premium-hover transition-all duration-300;
+    @apply bg-white border border-slate-100 rounded-2xl
+           shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_30px_rgba(0,0,0,0.04)]
+           hover:shadow-[0_4px_6px_rgba(0,0,0,0.04),0_20px_40px_rgba(0,0,0,0.08)]
+           hover:-translate-y-0.5
+           transition-all duration-300;
   }
-  
+
+  .card-glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40
+           shadow-[0_8px_32px_rgba(14,165,233,0.08)];
+  }
+
+  /* ── Form ─────────────────────────────────────────────────── */
   .input-field {
-    @apply w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all;
+    @apply w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-slate-900
+           placeholder:text-slate-400 text-sm font-medium
+           focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 focus:bg-white
+           outline-none transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2;
+  }
+
+  /* ── Badges ───────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold;
+  }
+  .badge-primary { @apply badge bg-primary-50 text-primary-700 border border-primary-100; }
+  .badge-success { @apply badge bg-emerald-50 text-emerald-700 border border-emerald-100; }
+  .badge-warning { @apply badge bg-amber-50 text-amber-700 border border-amber-100; }
+  .badge-danger  { @apply badge bg-red-50 text-red-700 border border-red-100; }
+
+  /* ── Sidebar ───────────────────────────────────────────────── */
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium
+           text-slate-500 hover:bg-slate-100 hover:text-slate-900
+           transition-all duration-150;
+  }
+  .sidebar-link-active {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold
+           bg-primary-50 text-primary-700
+           transition-all duration-150;
+  }
+
+  /* ── Tabs ─────────────────────────────────────────────────── */
+  .tab {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
+           text-slate-500 hover:text-slate-700 hover:bg-white/60
+           transition-all duration-150;
+  }
+  .tab-active {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
+           bg-white text-primary-600 shadow-sm
+           transition-all duration-150;
+  }
+
+  /* ── Section headings ─────────────────────────────────────── */
+  .section-title {
+    @apply text-xs font-bold text-slate-400 uppercase tracking-widest mb-4;
+  }
+
+  /* ── Dividers ─────────────────────────────────────────────── */
+  .divider {
+    @apply border-t border-slate-100 my-4;
   }
 
   /* Glassmorphism utility */
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20;
+    @apply bg-white/70 backdrop-blur-xl border border-white/30
+           shadow-[0_8px_32px_rgba(14,165,233,0.06)];
   }
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* ── Custom scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
 
-::-webkit-scrollbar-track {
-  @apply bg-slate-100;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
-}
-
-/* Resume Preview Styles */
+/* ── Resume Preview ───────────────────────────────────────── */
 .resume-preview-container {
-  width: 210mm; /* A4 Width */
-  min-height: 297mm; /* Minimum A4 Height */
-  @apply bg-white shadow-2xl mx-auto p-[15mm] relative overflow-visible;
-  /* Disable fixed aspect ratio to allow multi-page content flow */
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+  margin: 0 auto;
+  overflow: visible;
+  position: relative;
 }
 
-/* Visualization of pages in the editor */
-.resume-page-wrapper {
-  background-color: white;
-  margin-bottom: 2rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+.float { animation: float 3s ease-in-out infinite; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0.2); }
+  50%       { box-shadow: 0 0 0 8px rgba(14,165,233,0); }
+}
+.pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* ── Print ────────────────────────────────────────────────── */
 @media print {
-  .no-print, header, aside, button, .fixed {
-    display: none !important;
-  }
+  .no-print, header, aside, button, .fixed { display: none !important; }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 const base = StyleSheet.create({
   page: { fontFamily: 'Helvetica', fontSize: 9, backgroundColor: '#ffffff' },
@@ -35,12 +35,15 @@ const PdfExecutive = ({ basics: B, experience: E, education: Ed, skills: Sk, oth
     {/* Header */}
     <View style={{ borderBottom: `4 solid ${C}`, paddingBottom: 24, marginBottom: 32 }}>
       <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#0f172a', textTransform: 'uppercase', letterSpacing: -1 }}>{B.name}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
-        <Text style={{ fontSize: 16, color: '#64748b', fontStyle: 'italic' }}>{B.title}</Text>
-        <View style={{ alignItems: 'flex-end' }}>
-          <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 2 }}>{B.location}</Text>
-          <Text style={{ fontSize: 9, color: '#1e293b', marginTop: 2 }}>{B.email}</Text>
-          <Text style={{ fontSize: 9, color: '#1e293b', marginTop: 1 }}>{B.phone}</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12, alignItems: 'flex-end' }}>
+        <Text style={{ fontSize: 16, color: '#64748b', fontStyle: 'italic', maxWidth: '60%' }}>{B.title}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 15 }}>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 2 }}>{B.location}</Text>
+            <Text style={{ fontSize: 9, color: '#1e293b', marginTop: 2 }}>{B.email}</Text>
+            <Text style={{ fontSize: 9, color: '#1e293b', marginTop: 1 }}>{B.phone}</Text>
+          </View>
+          {B.photo && <Image src={{ uri: B.photo }} style={{ width: 50, height: 50, borderRadius: 25, border: '2 solid #f8fafc' }} />}
         </View>
       </View>
     </View>
@@ -125,6 +128,13 @@ const PdfProfessional = ({ basics: B, experience: E, education: Ed, skills: Sk, 
     <View style={{ flex: 1, padding: 35 }}>
       {/* Header – centered */}
       <View style={{ alignItems: 'center', borderBottom: '2 solid #f1f5f9', paddingBottom: 20, marginBottom: 25 }}>
+        {B.photo ? (
+          <Image src={{ uri: B.photo }} style={{ width: 60, height: 60, borderRadius: 30, marginBottom: 12, border: '2 solid #f1f5f9' }} />
+        ) : (
+          <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: C, alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>{B.name.charAt(0)}</Text>
+          </View>
+        )}
         <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#1e293b' }}>{B.name}</Text>
         <Text style={{ fontSize: 13, fontWeight: 'bold', color: C, marginTop: 5, textTransform: 'uppercase' }}>{B.title}</Text>
         <View style={{ flexDirection: 'row', gap: 15, marginTop: 12, fontSize: 8, color: '#64748b' }}>
@@ -201,6 +211,7 @@ const PdfCorporate = ({ basics: B, experience: E, education: Ed, skills: Sk, oth
   return (
     <View style={{ flex: 1, padding: 35 }}>
       <View style={{ alignItems: 'center', borderBottom: '2 solid #0f172a', paddingBottom: 20, marginBottom: 25 }}>
+        {B.photo && <Image src={{ uri: B.photo }} style={{ width: 50, height: 50, borderRadius: 25, marginBottom: 12 }} />}
         <Text style={{ fontSize: 28, fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 2, color: '#0f172a' }}>{B.name}</Text>
         <View style={{ flexDirection: 'row', gap: 12, marginTop: 10, fontSize: 8, color: '#475569', fontWeight: 'bold' }}>
           <Text>{B.email}</Text><Text>•</Text><Text>{B.phone}</Text><Text>•</Text><Text>{B.location}</Text>
@@ -266,11 +277,14 @@ const PdfCorporate = ({ basics: B, experience: E, education: Ed, skills: Sk, oth
 const PdfModern = ({ basics: B, experience: E, education: Ed, skills: Sk, other: O, color: C }) => (
   <View style={{ flex: 1 }}>
     {/* Colored header */}
-    <View style={{ backgroundColor: C, padding: 30, paddingBottom: 25 }}>
-      <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'white' }}>{B.name}</Text>
-      <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: 'bold', marginTop: 4 }}>{B.title}</Text>
-      <View style={{ flexDirection: 'row', gap: 15, marginTop: 10, fontSize: 8, color: 'rgba(255,255,255,0.9)' }}>
-        <Text>{B.email}</Text><Text>|</Text><Text>{B.phone}</Text><Text>|</Text><Text>{B.location}</Text>
+    <View style={{ backgroundColor: C, padding: 30, paddingBottom: 25, flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+      {B.photo && <Image src={{ uri: B.photo }} style={{ width: 60, height: 60, borderRadius: 30, border: '2 solid rgba(255,255,255,0.3)' }} />}
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'white' }}>{B.name}</Text>
+        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: 'bold', marginTop: 4 }}>{B.title}</Text>
+        <View style={{ flexDirection: 'row', gap: 15, marginTop: 10, fontSize: 8, color: 'rgba(255,255,255,0.9)' }}>
+          <Text>{B.email}</Text><Text>|</Text><Text>{B.phone}</Text><Text>|</Text><Text>{B.location}</Text>
+        </View>
       </View>
     </View>
     {/* Body */}
@@ -331,6 +345,7 @@ const PdfStartup = ({ basics: B, experience: E, education: Ed, skills: Sk, other
   <View style={{ flex: 1, flexDirection: 'row' }}>
     <View style={{ width: '28%', backgroundColor: '#0f172a', padding: 22, color: 'white' }}>
       <View style={{ width: 22, height: 5, backgroundColor: C, marginBottom: 16 }} />
+      {B.photo && <Image src={{ uri: B.photo }} style={{ width: 60, height: 60, borderRadius: 30, marginBottom: 15, border: `1 solid ${C}` }} />}
       <Text style={{ fontSize: 22, fontWeight: 'bold', color: 'white', lineHeight: 1.15 }}>{B.name}</Text>
       <Text style={{ fontSize: 8, color: C, fontWeight: 'bold', marginTop: 6, textTransform: 'uppercase' }}>{B.title}</Text>
       <View style={{ marginTop: 30 }}>
@@ -412,10 +427,11 @@ const PdfSwiss = ({ basics: B, experience: E, education: Ed, skills: Sk, other: 
             <Text style={{ fontSize: 40, fontWeight: 'bold', letterSpacing: -2, color: '#0f172a' }}>{B.name}<Text style={{ color: C }}>.</Text></Text>
             <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 3, marginTop: 12 }}>{B.title}</Text>
           </View>
-          <View style={{ flex: 1, backgroundColor: '#fbfcfd', padding: 20, borderLeft: '1 solid #f1f5f9', justifyContent: 'flex-end' }}>
+          <View style={{ flex: 1, backgroundColor: '#fbfcfd', padding: 20, borderLeft: '1 solid #f1f5f9', justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
+            {B.photo && <Image src={{ uri: B.photo }} style={{ width: 40, height: 40, borderRadius: 20, marginBottom: 5 }} />}
             <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#0f172a', textAlign: 'right' }}>{B.email}</Text>
-            <Text style={{ fontSize: 8, color: '#64748b', marginTop: 3, textAlign: 'right' }}>{B.phone}</Text>
-            <Text style={{ fontSize: 8, color: '#94a3b8', marginTop: 3, textAlign: 'right' }}>{B.location}</Text>
+            <Text style={{ fontSize: 8, color: '#64748b', textAlign: 'right' }}>{B.phone}</Text>
+            <Text style={{ fontSize: 8, color: '#94a3b8', textAlign: 'right' }}>{B.location}</Text>
           </View>
         </View>
         <Row label="Summary"><Text style={{ fontSize: 10, color: '#334155', lineHeight: 1.7, fontWeight: 'bold' }}>{B.summary}</Text></Row>
@@ -473,9 +489,13 @@ const PdfSwiss = ({ basics: B, experience: E, education: Ed, skills: Sk, other: 
 const PdfCreative = ({ basics: B, experience: E, education: Ed, skills: Sk, other: O, color: C }) => (
   <View style={{ flex: 1, flexDirection: 'row' }}>
     <View style={{ width: '80pt', backgroundColor: C, alignItems: 'center', padding: 16 }}>
-      <View style={{ width: 42, height: 42, borderRadius: 21, border: '2 solid rgba(255,255,255,0.45)', alignItems: 'center', justifyContent: 'center', marginBottom: 40 }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{B.name.charAt(0)}</Text>
-      </View>
+      {B.photo ? (
+        <Image src={{ uri: B.photo }} style={{ width: 50, height: 50, borderRadius: 25, marginBottom: 35, border: '2 solid rgba(255,255,255,0.3)' }} />
+      ) : (
+        <View style={{ width: 42, height: 42, borderRadius: 21, border: '2 solid rgba(255,255,255,0.45)', alignItems: 'center', justifyContent: 'center', marginBottom: 40 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{B.name.charAt(0)}</Text>
+        </View>
+      )}
       <View style={{ transform: 'rotate(-90deg)', width: 80 }}><Text style={{ fontSize: 9, fontWeight: 'bold', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 3 }}>EXPERIENCE</Text></View>
       <View style={{ transform: 'rotate(-90deg)', width: 80, marginTop: 90 }}><Text style={{ fontSize: 9, fontWeight: 'bold', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 3 }}>EDUCATION</Text></View>
     </View>
@@ -547,8 +567,13 @@ const PdfMinimal = ({ basics: B, experience: E, education: Ed, skills: Sk, other
   );
   return (
     <View style={{ flex: 1, padding: 44 }}>
-      <Text style={{ fontSize: 26, fontWeight: 'light', color: '#0f172a', marginBottom: 4 }}>{B.name}</Text>
-      <Text style={{ fontSize: 9, fontWeight: 'bold', color: C, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 16 }}>{B.title}</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+        <View>
+          <Text style={{ fontSize: 26, fontWeight: 'light', color: '#0f172a', marginBottom: 4 }}>{B.name}</Text>
+          <Text style={{ fontSize: 9, fontWeight: 'bold', color: C, textTransform: 'uppercase', letterSpacing: 2 }}>{B.title}</Text>
+        </View>
+        {B.photo && <Image src={{ uri: B.photo }} style={{ width: 50, height: 50, borderRadius: 25 }} />}
+      </View>
       <View style={{ flexDirection: 'row', gap: 12, marginBottom: 28, fontSize: 8, color: '#64748b' }}>
         <Text>{B.email}</Text><Text style={{ color: '#e2e8f0' }}>/</Text><Text>{B.phone}</Text><Text style={{ color: '#e2e8f0' }}>/</Text><Text>{B.location}</Text>
       </View>
@@ -611,6 +636,7 @@ const PdfElegant = ({ basics: B, experience: E, education: Ed, skills: Sk, other
       <View style={{ width: '100%', maxWidth: 480 }}>
         {/* Header */}
         <View style={{ alignItems: 'center', marginBottom: 28 }}>
+          {B.photo && <Image src={{ uri: B.photo }} style={{ width: 60, height: 60, borderRadius: 30, marginBottom: 15 }} />}
           <Text style={{ fontSize: 30, color: '#0f172a', textTransform: 'uppercase', letterSpacing: 5 }}>{B.name}<Text style={{ color: C }}>*</Text></Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 }}>
             <View style={{ width: 24, height: 1, backgroundColor: '#e2e8f0' }} />
@@ -669,11 +695,14 @@ const PdfFunctional = ({ basics: B, experience: E, education: Ed, skills: Sk, ot
   <View style={{ flex: 1, flexDirection: 'row' }}>
     {/* Main */}
     <View style={{ flex: 1, padding: 30, borderRight: '2 solid #f8fafc' }}>
-      <View style={{ borderBottom: '2 solid #f8fafc', paddingBottom: 20, marginBottom: 22 }}>
-        <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0f172a' }}>{B.name}</Text>
-        <Text style={{ fontSize: 12, fontWeight: 'bold', color: C, textTransform: 'uppercase', letterSpacing: 2, marginTop: 5 }}>{B.title}</Text>
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 10, fontSize: 7, color: '#94a3b8', fontWeight: 'bold', textTransform: 'uppercase' }}>
-          <Text>{B.email}</Text><Text>•</Text><Text>{B.phone}</Text><Text>•</Text><Text>{B.location}</Text>
+      <View style={{ borderBottom: '2 solid #f8fafc', paddingBottom: 20, marginBottom: 22, flexDirection: 'row', gap: 15, alignItems: 'center' }}>
+      {B.photo && <Image src={{ uri: B.photo }} style={{ width: 50, height: 50, borderRadius: 25 }} />}
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0f172a' }}>{B.name}</Text>
+          <Text style={{ fontSize: 12, fontWeight: 'bold', color: C, textTransform: 'uppercase', letterSpacing: 2, marginTop: 5 }}>{B.title}</Text>
+          <View style={{ flexDirection: 'row', gap: 10, marginTop: 10, fontSize: 7, color: '#94a3b8', fontWeight: 'bold', textTransform: 'uppercase' }}>
+            <Text>{B.email}</Text><Text>•</Text><Text>{B.phone}</Text><Text>•</Text><Text>{B.location}</Text>
+          </View>
         </View>
       </View>
       <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: 3, marginBottom: 8 }}>Summary</Text>

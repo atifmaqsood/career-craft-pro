@@ -11,6 +11,15 @@ const ProfessionalTemplate = ({ data }) => {
     <div className="min-h-full bg-white text-slate-900 p-12" style={{ fontFamily: settings.font }}>
       {/* Header - Single Column FAANG Style */}
       <div className="text-center mb-10 pb-10 border-b-2 border-slate-100">
+        {/* Profile Photo */}
+        <div className="flex justify-center mb-4">
+          {basics.photo
+            ? <img src={basics.photo} alt={basics.name} className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-xl ring-2 ring-slate-100" />
+            : <div className="w-24 h-24 rounded-full border-4 border-white shadow-xl ring-2 ring-slate-100 flex items-center justify-center text-3xl font-bold text-white" style={{ backgroundColor: settings.color }}>
+                {basics.name?.charAt(0)}
+              </div>
+          }
+        </div>
         <h1 className="text-5xl font-bold tracking-tight text-slate-800">{basics.name}</h1>
         <p className="text-xl font-medium mt-2" style={{ color: settings.color }}>{basics.title}</p>
         <div className="flex justify-center gap-6 mt-6 text-sm font-semibold text-slate-500">
@@ -19,6 +28,7 @@ const ProfessionalTemplate = ({ data }) => {
           <span>{basics.location}</span>
         </div>
       </div>
+
 
       <div className="space-y-10">
         <section>

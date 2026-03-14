@@ -2,17 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
-  ChevronLeft, 
-  Eye, 
-  EyeOff, 
-  Save, 
-  Download, 
-  Sparkles,
-  Layout,
-  LineChart as ChartIcon,
-  Zap,
-  Compass,
-  FileText
+  ChevronLeft, Eye, EyeOff, Save, Download, Sparkles,
+  Layout, LineChart as ChartIcon, Zap, Compass, FileText,
+  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { setResume } from '../store/slices/resumeSlice';
@@ -27,6 +19,15 @@ import KeywordOptimizer from '../components/editor/KeywordOptimizer';
 import ResumeAdvisor from '../components/editor/ResumeAdvisor';
 import CoverLetterGenerator from '../components/editor/CoverLetterGenerator';
 
+const tabs = [
+  { id: 'content',   label: 'Content',      icon: FileText },
+  { id: 'templates', label: 'Themes',        icon: Layout },
+  { id: 'scoring',   label: 'ATS Score',     icon: ChartIcon },
+  { id: 'optimizer', label: 'Keywords',      icon: Zap },
+  { id: 'advisor',   label: 'Advisor',       icon: Compass },
+  { id: 'letter',    label: 'Cover Letter',  icon: Sparkles },
+];
+
 const Editor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,138 +37,162 @@ const Editor = () => {
   const [activeTab, setActiveTab] = useState('content');
   const [showPreview, setShowPreview] = useState(true);
   const [showAI, setShowAI] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     if (id) {
       const resume = mockDatabaseService.getResumeById(id);
-      if (resume) {
-        dispatch(setResume(resume));
-      }
+      if (resume) dispatch(setResume(resume));
     }
   }, [id, dispatch]);
 
-  const renderActiveSection = () => (
+  const renderPanel = () => (
     <AnimatePresence mode="wait">
-      {activeTab === 'content' && (
-        <motion.div key="content" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <EditorForm />
-        </motion.div>
-      )}
-      {activeTab === 'templates' && (
-        <motion.div key="templates" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <TemplateSwitcher />
-        </motion.div>
-      )}
-      {activeTab === 'scoring' && (
-        <motion.div key="scoring" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <ATSScoring />
-        </motion.div>
-      )}
-      {activeTab === 'optimizer' && (
-        <motion.div key="optimizer" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <KeywordOptimizer />
-        </motion.div>
-      )}
-      {activeTab === 'advisor' && (
-        <motion.div key="advisor" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <ResumeAdvisor />
-        </motion.div>
-      )}
-      {activeTab === 'letter' && (
-        <motion.div key="letter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-          <CoverLetterGenerator />
-        </motion.div>
+      {tabs.map(tab =>
+        activeTab === tab.id ? (
+          <motion.div
+            key={tab.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18 }}
+          >
+            {tab.id === 'content'   && <EditorForm />}
+            {tab.id === 'templates' && <TemplateSwitcher />}
+            {tab.id === 'scoring'   && <ATSScoring />}
+            {tab.id === 'optimizer' && <KeywordOptimizer />}
+            {tab.id === 'advisor'   && <ResumeAdvisor />}
+            {tab.id === 'letter'    && <CoverLetterGenerator />}
+          </motion.div>
+        ) : null
       )}
     </AnimatePresence>
   );
 
   const handleSave = () => {
     mockDatabaseService.saveResume(currentResume);
-    alert('Resume saved successfully!');
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2200);
   };
 
   const handleExport = async () => {
+    setExporting(true);
     const filename = `${currentResume.basics.name?.replace(/\s+/g, '_') || 'my'}_resume.pdf`;
     await exportToPDF(currentResume, filename);
+    setExporting(false);
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50 overflow-hidden">
-      {/* Top Navigation */}
-      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-30 shadow-sm no-print">
-        <div className="flex items-center gap-4">
-          <button 
+    <div className="h-screen flex flex-col bg-slate-100 overflow-hidden">
+
+      {/* ── Top Bar ─────────────────────────────── */}
+      <header className="h-14 bg-white border-b border-slate-200/80 flex items-center justify-between px-4 z-30 shrink-0 no-print">
+        {/* Left */}
+        <div className="flex items-center gap-3">
+          <button
             onClick={() => navigate('/')}
-            className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors shrink-0"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
-          <div className="h-6 w-px bg-slate-200 mx-2" />
-          <input 
-            type="text" 
+          <div className="h-5 w-px bg-slate-200" />
+          <input
+            type="text"
             value={currentResume.title}
             onChange={(e) => dispatch(setResume({ ...currentResume, title: e.target.value }))}
-            className="text-lg font-bold text-slate-900 border-none bg-transparent focus:ring-0 w-64 p-0"
+            className="text-sm font-bold text-slate-800 border-none bg-transparent focus:ring-0 outline-none w-48 truncate"
           />
         </div>
-        
-        <div className="flex items-center gap-3">
-          <div className="flex bg-slate-100 p-1 rounded-xl mr-4 overflow-x-auto max-w-[500px] scrollbar-hide">
-            {[
-              { id: 'content', label: 'Content', icon: FileText },
-              { id: 'templates', label: 'Themes', icon: Layout },
-              { id: 'scoring', label: 'ATS Score', icon: ChartIcon },
-              { id: 'optimizer', label: 'Optimizer', icon: Zap },
-              { id: 'advisor', label: 'Advisor', icon: Compass },
-              { id: 'letter', label: 'Cover Letter', icon: Sparkles }
-            ].map(tab => (
-              <button 
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-white shadow-sm text-primary-600' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                <tab.icon size={14} />
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          
-          <button 
+
+        {/* Center – Tabs */}
+        <div className="flex items-center bg-slate-100 rounded-xl p-1 gap-0.5 overflow-x-auto no-scrollbar">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={activeTab === tab.id ? 'tab-active' : 'tab'}
+            >
+              <tab.icon size={13} />
+              <span className="hidden sm:inline">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Right – Actions */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
             onClick={() => setShowAI(!showAI)}
-            className={`btn-secondary gap-2 border-primary-200 text-primary-600 ${showAI ? 'bg-primary-50' : ''}`}
+            className={`p-2.5 rounded-xl transition-all ${showAI ? 'bg-violet-100 text-violet-600' : 'hover:bg-slate-100 text-slate-500'}`}
+            title="AI Assistant"
           >
             <Sparkles size={18} />
           </button>
-          
-          <button onClick={handleSave} className="btn-secondary gap-2 border-slate-200">
-            <Save size={18} />
+
+          <button
+            onClick={handleSave}
+            className={`p-2.5 rounded-xl transition-all ${saved ? 'bg-emerald-100 text-emerald-600' : 'hover:bg-slate-100 text-slate-500'}`}
+            title="Save"
+          >
+            {saved ? <CheckCircle2 size={18} /> : <Save size={18} />}
           </button>
-          
-          <button onClick={handleExport} className="btn-primary gap-2 shadow-primary-200">
-            <Download size={18} /> Export
+
+          <button
+            onClick={() => setShowPreview(!showPreview)}
+            className={`p-2.5 rounded-xl transition-all ${showPreview ? 'bg-primary-100 text-primary-600' : 'hover:bg-slate-100 text-slate-500'}`}
+            title={showPreview ? 'Hide Preview' : 'Show Preview'}
+          >
+            {showPreview ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="btn-primary ml-1 px-4 py-2 text-sm"
+          >
+            <Download size={15} />
+            {exporting ? 'Exporting…' : 'Export PDF'}
           </button>
         </div>
       </header>
-      
-      {/* Editor Body */}
+
+      {/* ── Body ──────────────────────────────── */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Editing Area */}
-        <div className={`flex-1 overflow-y-auto bg-white transition-all duration-500 no-print ${showPreview ? 'w-1/2 border-r border-slate-200' : 'w-full'}`}>
-          <div className="max-w-3xl mx-auto py-12 px-10">
-            {renderActiveSection()}
+
+        {/* Editor Panel */}
+        <div className={`flex flex-col overflow-y-auto bg-white transition-all duration-300 no-print ${showPreview ? 'w-[45%] border-r border-slate-200' : 'w-full'}`}>
+          <div className="max-w-2xl mx-auto w-full py-8 px-6">
+            {renderPanel()}
           </div>
         </div>
-        
-        {/* Preview Area */}
-        {showPreview && (
-          <div className="flex-1 bg-slate-100 overflow-y-auto py-12 px-10">
-            <div className="max-w-A4 mx-auto sticky top-0 shadow-2xl">
-              <ResumePreview />
-            </div>
-          </div>
-        )}
+
+        {/* Preview Panel */}
+        <AnimatePresence>
+          {showPreview && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 bg-slate-100 overflow-y-auto"
+            >
+              {/* Preview header */}
+              <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-slate-100/90 backdrop-blur-sm border-b border-slate-200/60">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Live Preview</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 pulse-glow" />
+                  <span className="text-xs text-slate-400 font-medium">Auto-updating</span>
+                </div>
+              </div>
+              <div className="py-10 px-8 flex justify-center">
+                <ResumePreview />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
+      {/* AI Drawer */}
       <AnimatePresence>
         {showAI && (
           <div className="no-print">
@@ -175,17 +200,6 @@ const Editor = () => {
           </div>
         )}
       </AnimatePresence>
-
-      {/* Preview Toggle */}
-      <button 
-        onClick={() => setShowPreview(!showPreview)}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group no-print"
-      >
-        {showPreview ? <EyeOff size={24} /> : <Eye size={24} />}
-        <span className="absolute right-16 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-          {showPreview ? 'Hide Preview' : 'Show Preview'}
-        </span>
-      </button>
     </div>
   );
 };
