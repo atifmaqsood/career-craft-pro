@@ -1,0 +1,88 @@
+import React from 'react';
+
+const ModernTemplate = ({ data }) => {
+  const { basics, sections, settings } = data;
+  const experience = sections.find(s => s.id === 'experience')?.items || [];
+  const skills = sections.find(s => s.id === 'skills')?.items || [];
+  const education = sections.find(s => s.id === 'education')?.items || [];
+
+  return (
+    <div 
+      className="h-full bg-white flex flex-col"
+      style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
+    >
+      {/* Header */}
+      <div 
+        className="p-10 text-white"
+        style={{ backgroundColor: settings.color }}
+      >
+        <h1 className="text-4xl font-bold tracking-tight">{basics.name || 'Your Name'}</h1>
+        <p className="mt-2 text-white/80 font-medium">Software Engineer & Product Designer</p>
+        <div className="flex flex-wrap gap-4 mt-6 text-sm text-white/90">
+          {basics.email && <span>{basics.email}</span>}
+          {basics.phone && <span>{basics.phone}</span>}
+          {basics.location && <span>{basics.location}</span>}
+        </div>
+      </div>
+
+      <div className="flex flex-1">
+        {/* Left Column */}
+        <div className="w-2/3 p-10 pr-6 border-r border-slate-100">
+          <section className="mb-8">
+            <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: settings.color }}>Professional Summary</h2>
+            <p className="text-slate-600 leading-relaxed">{basics.summary || 'Summary goes here...'}</p>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: settings.color }}>Experience</h2>
+            <div className="space-y-6">
+              {experience.map((item, i) => (
+                <div key={i} className="relative pl-4 border-l-2 border-slate-50">
+                  <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: settings.color }} />
+                  <h3 className="font-bold text-slate-800">{item.company}</h3>
+                  <div className="flex justify-between items-center mt-1">
+                    <span className="text-sm font-semibold text-slate-500">{item.position}</span>
+                    <span className="text-xs font-bold text-slate-400">{item.startDate} - {item.endDate}</span>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600 line-clamp-3">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        {/* Right Column */}
+        <div className="w-1/3 p-10 pl-6 bg-slate-50/50">
+          <section className="mb-10">
+            <h2 className="text-sm font-bold uppercase tracking-widest mb-4 text-slate-400">Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, i) => (
+                <span 
+                  key={i} 
+                  className="px-2 py-1 bg-white border border-slate-200 text-slate-700 rounded-md text-xs font-semibold"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-bold uppercase tracking-widest mb-4 text-slate-400">Education</h2>
+            <div className="space-y-4">
+              {education.map((item, i) => (
+                <div key={i}>
+                  <h3 className="text-sm font-bold text-slate-800">{item.degree}</h3>
+                  <p className="text-xs text-slate-500 mt-1">{item.institution}</p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">{item.startDate} - {item.endDate}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ModernTemplate;
