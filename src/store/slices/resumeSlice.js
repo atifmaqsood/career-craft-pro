@@ -7,6 +7,7 @@ const initialState = {
     templateId: 'modern',
     basics: {
       name: '',
+      title: '',
       email: '',
       phone: '',
       location: '',

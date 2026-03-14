@@ -1,27 +1,31 @@
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { pdf } from '@react-pdf/renderer';
+import React from 'react';
+import PDFResume from '../components/preview/PDFResume';
 
-export const exportToPDF = async (elementId, filename = 'resume.pdf') => {
-  const element = document.getElementById(elementId);
-  if (!element) return;
-
+export const exportToPDF = async (data, filename = 'resume.pdf') => {
   try {
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff'
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(filename);
+    console.log('[pdfExport] Generating PDF with data:', data);
+    
+    // Create the PDF blob directly using react-pdf's engine
+    // Use React.createElement to avoid JSX parsing errors in a .js file
+    const doc = React.createElement(PDFResume, { data });
+    const blob = await pdf(doc).toBlob();
+    
+    // Create download link and trigger it
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Cleanup
+    URL.revokeObjectURL(url);
+    
+    console.log('[pdfExport] PDF generated and download triggered successfully.');
   } catch (error) {
-    console.error('Error generating PDF:', error);
+    console.error('Error generating PDF with react-pdf:', error);
   }
 };

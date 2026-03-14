@@ -95,8 +95,9 @@ export const resumeParser = {
     const phone = text.match(/(\+?\d{1,3}[-.\s]?)?\(?\d{3,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{4}/g)?.[0] || '';
     const linkedin = text.match(/linkedin\.com\/in\/[a-zA-Z0-9-]+/gi)?.[0] || '';
     
-    // Name heuristic: First line often name
+    // Name heuristic: First line often name, second often title
     const name = lines[0]?.length < 40 ? lines[0] : fileName.split('.')[0];
+    const title = lines[1]?.length < 60 && !lines[1].includes('@') ? lines[1] : '';
     
     // Location heuristic
     const locationPattern = /([A-Z][a-z]+(?:,\s*[A-Z][a-z]+)+)/g;
@@ -273,6 +274,7 @@ export const resumeParser = {
     return {
       basics: {
         name,
+        title,
         email,
         phone,
         location,

@@ -37,7 +37,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-slate-200 bg-white flex flex-col p-4">
+      <aside className="w-64 border-r border-slate-200 bg-white flex flex-col p-4 no-print">
         <div className="flex items-center gap-2 px-4 py-6 mb-8">
           <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-200">
             <Zap className="fill-current" size={24} />

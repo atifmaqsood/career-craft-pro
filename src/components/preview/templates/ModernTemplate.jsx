@@ -8,7 +8,7 @@ const ModernTemplate = ({ data }) => {
 
   return (
     <div 
-      className="h-full bg-white flex flex-col"
+      className="min-h-full bg-white flex flex-col"
       style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
     >
       {/* Header */}

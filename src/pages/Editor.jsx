@@ -52,14 +52,14 @@ const Editor = () => {
   };
 
   const handleExport = async () => {
-    const filename = `${currentResume.title.replace(/\s+/g, '_').toLowerCase()}_resume.pdf`;
-    await exportToPDF('resume-preview', filename);
+    const filename = `${currentResume.basics.name?.replace(/\s+/g, '_') || 'my'}_resume.pdf`;
+    await exportToPDF(currentResume, filename);
   };
 
   return (
     <div className="h-screen flex flex-col bg-slate-50 overflow-hidden">
       {/* Top Navigation */}
-      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-30 shadow-sm">
+      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-30 shadow-sm no-print">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate('/')}
@@ -117,7 +117,7 @@ const Editor = () => {
       {/* Editor Body */}
       <div className="flex-1 flex overflow-hidden">
         {/* Editing Area */}
-        <div className={`flex-1 overflow-y-auto bg-white transition-all duration-500 ${showPreview ? 'w-1/2 border-r border-slate-200' : 'w-full'}`}>
+        <div className={`flex-1 overflow-y-auto bg-white transition-all duration-500 no-print ${showPreview ? 'w-1/2 border-r border-slate-200' : 'w-full'}`}>
           <div className="max-w-3xl mx-auto py-12 px-10">
             <AnimatePresence mode="wait">
               {activeTab === 'content' && (
@@ -166,7 +166,7 @@ const Editor = () => {
         {/* Preview Toggle */}
         <button 
           onClick={() => setShowPreview(!showPreview)}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group"
+          className="fixed bottom-8 right-8 w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group no-print"
         >
           {showPreview ? <EyeOff size={24} /> : <Eye size={24} />}
           <span className="absolute right-16 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
@@ -176,7 +176,11 @@ const Editor = () => {
       </div>
 
       <AnimatePresence>
-        {showAI && <AIAssistant onClose={() => setShowAI(false)} />}
+        {showAI && (
+          <div className="no-print">
+            <AIAssistant onClose={() => setShowAI(false)} />
+          </div>
+        )}
       </AnimatePresence>
     </div>
   );

@@ -53,7 +53,7 @@
 .resume-preview-container {
   width: 210mm; /* A4 Width */
   min-height: 297mm; /* Minimum A4 Height */
-  @apply bg-white shadow-2xl mx-auto p-[15mm] relative overflow-hidden;
+  @apply bg-white shadow-2xl mx-auto p-[15mm] relative overflow-visible;
   /* Disable fixed aspect ratio to allow multi-page content flow */
 }
 
@@ -65,11 +65,7 @@
 }
 
 @media print {
-  .resume-preview-container {
-    width: 210mm;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
+  .no-print, header, aside, button, .fixed {
+    display: none !important;
   }
 }
