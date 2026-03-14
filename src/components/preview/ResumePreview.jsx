@@ -4,6 +4,12 @@ import ModernTemplate from './templates/ModernTemplate';
 import CorporateTemplate from './templates/CorporateTemplate';
 import CreativeTemplate from './templates/CreativeTemplate';
 import MinimalTemplate from './templates/MinimalTemplate';
+import ProfessionalTemplate from './templates/ProfessionalTemplate';
+import ExecutiveTemplate from './templates/ExecutiveTemplate';
+import StartupTemplate from './templates/StartupTemplate';
+import SwissTemplate from './templates/SwissTemplate';
+import ElegantTemplate from './templates/ElegantTemplate';
+import FunctionalTemplate from './templates/FunctionalTemplate';
 
 const ResumePreview = () => {
   const { currentResume } = useSelector(state => state.resume);
@@ -12,16 +18,17 @@ const ResumePreview = () => {
 
   const renderTemplate = () => {
     switch (templateId) {
-      case 'modern':
-        return <ModernTemplate data={currentResume} />;
-      case 'corporate':
-        return <CorporateTemplate data={currentResume} />;
-      case 'creative':
-        return <CreativeTemplate data={currentResume} />;
-      case 'minimal':
-        return <MinimalTemplate data={currentResume} />;
-      default:
-        return <ModernTemplate data={currentResume} />;
+      case 'modern': return <ModernTemplate data={currentResume} />;
+      case 'corporate': return <CorporateTemplate data={currentResume} />;
+      case 'creative': return <CreativeTemplate data={currentResume} />;
+      case 'minimal': return <MinimalTemplate data={currentResume} />;
+      case 'professional': return <ProfessionalTemplate data={currentResume} />;
+      case 'executive': return <ExecutiveTemplate data={currentResume} />;
+      case 'startup': return <StartupTemplate data={currentResume} />;
+      case 'swiss': return <SwissTemplate data={currentResume} />;
+      case 'elegant': return <ElegantTemplate data={currentResume} />;
+      case 'functional': return <FunctionalTemplate data={currentResume} />;
+      default: return <ModernTemplate data={currentResume} />;
     }
   };
 

@@ -5,6 +5,7 @@ const CreativeTemplate = ({ data }) => {
   const experience = sections.find(s => s.id === 'experience')?.items || [];
   const skills = sections.find(s => s.id === 'skills')?.items || [];
   const education = sections.find(s => s.id === 'education')?.items || [];
+  const otherSections = sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id));
 
   return (
     <div 
@@ -31,7 +32,7 @@ const CreativeTemplate = ({ data }) => {
       <div className="flex-1 p-12">
         <header className="mb-12">
           <h1 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">{basics.name || 'Your Name'}</h1>
-          <p className="text-xl font-bold mt-2" style={{ color: settings.color }}>Expert UI/UX Designer</p>
+          <p className="text-xl font-bold mt-2" style={{ color: settings.color }}>{basics.title}</p>
           <div className="mt-8 grid grid-cols-3 gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
             <div>{basics.email}</div>
             <div>{basics.phone}</div>
@@ -63,13 +64,13 @@ const CreativeTemplate = ({ data }) => {
             </div>
 
             {/* Dynamic Sections */}
-            {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
+            {otherSections.map(section => (
               <div key={section.id} className="pt-8">
                 <h2 className="font-black text-slate-900 uppercase tracking-widest text-xs mb-6 border-b-2 border-slate-900 pb-2">{section.title}</h2>
                 <div className="space-y-6">
                   {section.items.map((item, i) => (
                     <div key={i}>
-                      <h3 className="font-black text-slate-800 uppercase tracking-tight text-sm">{item.title}</h3>
+                      <h3 className="font-black text-slate-800 uppercase tracking-tight text-sm">{item.title || item.company}</h3>
                       <div className="mt-2 text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">
                         {item.content || item.description}
                       </div>
@@ -82,12 +83,12 @@ const CreativeTemplate = ({ data }) => {
 
           <div className="col-span-2 space-y-10">
             <section>
-              <h2 className="font-black text-slate-900 uppercase tracking-widest text-xs mb-6 border-b-2 border-slate-900 pb-2">Top Skills</h2>
-              <div className="flex flex-wrap gap-2">
+              <h2 className="font-black text-slate-900 uppercase tracking-widest text-xs mb-6 border-b-2 border-slate-900 pb-2">Skills</h2>
+              <div className="flex flex-wrap gap-2 text-xs">
                 {skills.map((skill, i) => (
                   <span 
                     key={i} 
-                    className="px-3 py-1 text-white text-[10px] font-black uppercase tracking-tighter rounded-sm"
+                    className="px-3 py-1 text-white font-black uppercase tracking-tighter rounded-sm"
                     style={{ backgroundColor: settings.color }}
                   >
                     {skill}
@@ -103,6 +104,7 @@ const CreativeTemplate = ({ data }) => {
                   <div key={i}>
                     <h3 className="text-sm font-black text-slate-800 uppercase leading-tight">{item.degree}</h3>
                     <p className="text-[10px] text-slate-500 font-bold mt-1">{item.institution}</p>
+                    <p className="text-[10px] text-slate-400 mt-1">{item.startDate} - {item.endDate}</p>
                   </div>
                 ))}
               </div>

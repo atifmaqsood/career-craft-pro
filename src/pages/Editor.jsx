@@ -46,6 +46,41 @@ const Editor = () => {
     }
   }, [id, dispatch]);
 
+  const renderActiveSection = () => (
+    <AnimatePresence mode="wait">
+      {activeTab === 'content' && (
+        <motion.div key="content" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <EditorForm />
+        </motion.div>
+      )}
+      {activeTab === 'templates' && (
+        <motion.div key="templates" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <TemplateSwitcher />
+        </motion.div>
+      )}
+      {activeTab === 'scoring' && (
+        <motion.div key="scoring" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <ATSScoring />
+        </motion.div>
+      )}
+      {activeTab === 'optimizer' && (
+        <motion.div key="optimizer" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <KeywordOptimizer />
+        </motion.div>
+      )}
+      {activeTab === 'advisor' && (
+        <motion.div key="advisor" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <ResumeAdvisor />
+        </motion.div>
+      )}
+      {activeTab === 'letter' && (
+        <motion.div key="letter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+          <CoverLetterGenerator />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   const handleSave = () => {
     mockDatabaseService.saveResume(currentResume);
     alert('Resume saved successfully!');
@@ -119,60 +154,18 @@ const Editor = () => {
         {/* Editing Area */}
         <div className={`flex-1 overflow-y-auto bg-white transition-all duration-500 no-print ${showPreview ? 'w-1/2 border-r border-slate-200' : 'w-full'}`}>
           <div className="max-w-3xl mx-auto py-12 px-10">
-            <AnimatePresence mode="wait">
-              {activeTab === 'content' && (
-                <motion.div key="content" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <EditorForm />
-                </motion.div>
-              )}
-              {activeTab === 'templates' && (
-                <motion.div key="templates" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <TemplateSwitcher />
-                </motion.div>
-              )}
-              {activeTab === 'scoring' && (
-                <motion.div key="scoring" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <ATSScoring />
-                </motion.div>
-              )}
-              {activeTab === 'optimizer' && (
-                <motion.div key="optimizer" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <KeywordOptimizer />
-                </motion.div>
-              )}
-              {activeTab === 'advisor' && (
-                <motion.div key="advisor" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <ResumeAdvisor />
-                </motion.div>
-              )}
-              {activeTab === 'letter' && (
-                <motion.div key="letter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <CoverLetterGenerator />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {renderActiveSection()}
           </div>
         </div>
         
         {/* Preview Area */}
         {showPreview && (
           <div className="flex-1 bg-slate-100 overflow-y-auto py-12 px-10">
-            <div className="max-w-A4 mx-auto sticky top-0">
+            <div className="max-w-A4 mx-auto sticky top-0 shadow-2xl">
               <ResumePreview />
             </div>
           </div>
         )}
-        
-        {/* Preview Toggle */}
-        <button 
-          onClick={() => setShowPreview(!showPreview)}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group no-print"
-        >
-          {showPreview ? <EyeOff size={24} /> : <Eye size={24} />}
-          <span className="absolute right-16 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-            Toggle Live Preview
-          </span>
-        </button>
       </div>
 
       <AnimatePresence>
@@ -182,6 +175,17 @@ const Editor = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Preview Toggle */}
+      <button 
+        onClick={() => setShowPreview(!showPreview)}
+        className="fixed bottom-8 right-8 w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group no-print"
+      >
+        {showPreview ? <EyeOff size={24} /> : <Eye size={24} />}
+        <span className="absolute right-16 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+          {showPreview ? 'Hide Preview' : 'Show Preview'}
+        </span>
+      </button>
     </div>
   );
 };

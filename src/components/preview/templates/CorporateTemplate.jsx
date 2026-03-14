@@ -5,6 +5,7 @@ const CorporateTemplate = ({ data }) => {
   const experience = sections.find(s => s.id === 'experience')?.items || [];
   const skills = sections.find(s => s.id === 'skills')?.items || [];
   const education = sections.find(s => s.id === 'education')?.items || [];
+  const otherSections = sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id));
 
   return (
     <div 
@@ -12,7 +13,7 @@ const CorporateTemplate = ({ data }) => {
       style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
     >
       <div className="text-center border-b-2 border-slate-900 pb-8 mb-8">
-        <h1 className="text-4xl font-bold uppercase tracking-[0.2em]">{basics.name || 'Your Name'}</h1>
+        <h1 className="text-4xl font-bold uppercase tracking-[0.2em]">{basics.name}</h1>
         <div className="flex justify-center gap-6 mt-4 text-sm font-semibold text-slate-600 uppercase tracking-widest">
           {basics.email && <span>{basics.email}</span>}
           {basics.phone && <span>{basics.phone}</span>}
@@ -21,8 +22,8 @@ const CorporateTemplate = ({ data }) => {
       </div>
 
       <section className="mb-8">
-        <h2 className="text-sm font-bold uppercase tracking-[0.3em] mb-4 text-center text-slate-900 border-b border-slate-100 pb-2">Professional Profile</h2>
-        <div className="text-slate-700 leading-relaxed text-center max-w-2xl mx-auto italic whitespace-pre-wrap">{basics.summary || 'Summary goes here...'}</div>
+        <h2 className="text-sm font-bold uppercase tracking-[0.3em] mb-4 text-center text-slate-900 border-b border-slate-100 pb-2">Profile</h2>
+        <div className="text-slate-700 leading-relaxed text-center max-w-2xl mx-auto italic whitespace-pre-wrap">{basics.summary}</div>
       </section>
 
       <section className="mb-8">
@@ -44,14 +45,14 @@ const CorporateTemplate = ({ data }) => {
       </section>
 
       {/* Dynamic Sections */}
-      {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
-        <section key={section.id} className="mt-8">
+      {otherSections.map(section => (
+        <section key={section.id} className="mb-8">
           <h2 className="text-sm font-bold uppercase tracking-widest border-b border-slate-200 pb-1 mb-4" style={{ color: settings.color }}>{section.title}</h2>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {section.items.map((item, i) => (
               <div key={i}>
-                <h3 className="font-bold text-slate-800 text-sm">{item.title}</h3>
-                <div className="text-xs text-slate-600 mt-1 whitespace-pre-wrap leading-relaxed">
+                <h3 className="font-bold text-slate-800 text-sm">{item.title || item.company}</h3>
+                <div className="text-sm text-slate-600 mt-1 whitespace-pre-wrap leading-relaxed">
                   {item.content || item.description}
                 </div>
               </div>
@@ -60,7 +61,7 @@ const CorporateTemplate = ({ data }) => {
         </section>
       ))}
 
-      <div className="grid grid-cols-2 gap-10">
+      <div className="grid grid-cols-2 gap-10 mt-auto">
         <section>
           <h2 className="text-sm font-bold uppercase tracking-[0.3em] mb-4 text-slate-900 border-b border-slate-900 pb-1 w-fit">Skills</h2>
           <div className="grid grid-cols-2 gap-y-2 mt-4">

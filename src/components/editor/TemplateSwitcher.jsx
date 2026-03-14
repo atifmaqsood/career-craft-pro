@@ -4,10 +4,16 @@ import { Check } from 'lucide-react';
 import { setTemplate, updateSettings } from '../../store/slices/resumeSlice';
 
 const templates = [
-  { id: 'modern', name: 'Modern Professional', description: 'Clean, minimalist design for modern tech roles.', previewColor: '#0ea5e9' },
-  { id: 'corporate', name: 'Executive Corporate', description: 'Traditional and authoritative for management positions.', previewColor: '#1e293b' },
+  { id: 'modern', name: 'Modern Pro', description: 'Clean, minimalist design for modern tech roles.', previewColor: '#0ea5e9' },
+  { id: 'professional', name: 'FAANG Standard', description: 'Industry-standard tech resume, optimized for big tech.', previewColor: '#10b981' },
+  { id: 'corporate', name: 'Executive Corporate', description: 'Traditional and authoritative for management.', previewColor: '#1e293b' },
+  { id: 'startup', name: 'Startup Builder', description: 'Bold, asymmetric design for fast-paced startups.', previewColor: '#f43f5e' },
+  { id: 'swiss', name: 'Swiss Grid', description: 'Clean, structured, and highly readable typography.', previewColor: '#6366f1' },
+  { id: 'executive', name: 'Luxury Executive', description: 'Premium feel with elegant borders and branding.', previewColor: '#a855f7' },
+  { id: 'elegant', name: 'Refined Branding', description: 'Soft, minimalist aesthetic for creative leads.', previewColor: '#ec4899' },
+  { id: 'functional', name: 'Technical Lead', description: 'High data density for senior technical roles.', previewColor: '#334155' },
   { id: 'creative', name: 'Creative Portfolio', description: 'Bold and unique for designers and artists.', previewColor: '#6366f1' },
-  { id: 'minimal', name: 'Minimalist Slate', description: 'Strict focus on content with elegant typography.', previewColor: '#64748b' }
+  { id: 'minimal', name: 'Minimalist Slate', description: 'Strict focus on content with elegant type.', previewColor: '#64748b' }
 ];
 
 const colors = [
