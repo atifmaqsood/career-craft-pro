@@ -30,7 +30,7 @@ const ModernTemplate = ({ data }) => {
         <div className="w-2/3 p-10 pr-6 border-r border-slate-100">
           <section className="mb-8">
             <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: settings.color }}>Professional Summary</h2>
-            <p className="text-slate-600 leading-relaxed">{basics.summary || 'Summary goes here...'}</p>
+            <div className="text-slate-600 leading-relaxed whitespace-pre-wrap">{basics.summary || 'Summary goes here...'}</div>
           </section>
 
           <section>
@@ -44,7 +44,9 @@ const ModernTemplate = ({ data }) => {
                     <span className="text-sm font-semibold text-slate-500">{item.position}</span>
                     <span className="text-xs font-bold text-slate-400">{item.startDate} - {item.endDate}</span>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600 line-clamp-3">{item.description}</p>
+                  <div className="mt-2 text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">
+                    {item.description}
+                  </div>
                 </div>
               ))}
             </div>
@@ -58,7 +60,9 @@ const ModernTemplate = ({ data }) => {
                 {section.items.map((item, i) => (
                   <div key={i}>
                     <h3 className="font-bold text-slate-800 text-sm">{item.title}</h3>
-                    <p className="text-xs text-slate-600 mt-1">{item.content}</p>
+                    <div className="text-xs text-slate-600 mt-1 whitespace-pre-wrap leading-relaxed">
+                      {item.content || item.description}
+                    </div>
                   </div>
                 ))}
               </div>

@@ -92,6 +92,26 @@ const resumeSlice = createSlice({
       if (section) {
         section.items = section.items.filter(i => i.id !== itemId);
       }
+    },
+    addCustomSection: (state, action) => {
+      const { title, type } = action.payload;
+      const id = title.toLowerCase().replace(/\s+/g, '_');
+      // Avoid duplicates
+      if (!state.currentResume.sections.some(s => s.id === id)) {
+        state.currentResume.sections.push({
+          id,
+          title,
+          type, // 'list' or 'tags'
+          items: []
+        });
+      }
+    },
+    removeSection: (state, action) => {
+      const sectionId = action.payload;
+      // Protected sections
+      if (!['basics', 'experience', 'education', 'skills'].includes(sectionId)) {
+        state.currentResume.sections = state.currentResume.sections.filter(s => s.id !== sectionId);
+      }
     }
   }
 });
@@ -110,7 +130,9 @@ export const {
   setSkills,
   setTemplate,
   addSectionItem,
-  removeSectionItem
+  removeSectionItem,
+  addCustomSection,
+  removeSection
 } = resumeSlice.actions;
 
 export default resumeSlice.reducer;

@@ -4,107 +4,128 @@ import {
   Compass, 
   Sparkles, 
   Plus, 
-  Check, 
-  Info,
+  PlusCircle,
+  Trophy,
+  Globe,
+  Award,
+  BookOpen,
+  Users,
+  Heart,
+  Briefcase,
+  History,
+  FileText,
   Lightbulb,
-  RefreshCw
+  RefreshCw,
+  X
 } from 'lucide-react';
-import { aiService } from '../../services/aiService';
-import { updateSectionOrder } from '../../store/slices/resumeSlice';
+import { addCustomSection } from '../../store/slices/resumeSlice';
+
+const STANDARD_SECTIONS = [
+  { id: 'projects', title: 'Projects', description: 'Showcase your personal or professional projects.', icon: FileText },
+  { id: 'certificates', title: 'Certifications', description: 'List your industry certifications.', icon: Award },
+  { id: 'languages', title: 'Languages', description: 'Specify your language proficiency levels.', icon: Globe },
+  { id: 'awards', title: 'Awards & Honors', description: 'Highlight your professional achievements.', icon: Trophy },
+  { id: 'volunteering', title: 'Volunteer Work', description: 'Share your social contributions.', icon: Heart },
+  { id: 'publications', title: 'Publications', description: 'Research papers or articles you authored.', icon: BookOpen },
+  { id: 'references', title: 'References', description: 'Contact info for professional references.', icon: Users },
+  { id: 'interests', title: 'Interests', description: 'Personal hobbies that show character.', icon: History },
+  { id: 'courses', title: 'Courses', description: 'Relevant coursework for your field.', icon: History }
+];
 
 const ResumeAdvisor = () => {
   const dispatch = useDispatch();
   const { currentResume } = useSelector(state => state.resume);
-  const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+  const [customTitle, setCustomTitle] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
-  const handleGetSuggestions = async () => {
-    setLoading(true);
-    const result = await aiService.suggestSections(
-      currentResume.sections.find(s => s.id === 'skills')?.items || [],
-      currentResume.sections.find(s => s.id === 'experience')?.items || []
-    );
-    setSuggestions(result);
-    setLoading(false);
+  const handleAddSection = (section) => {
+    dispatch(addCustomSection({ title: section.title, type: 'list' }));
   };
 
-  const addSection = (suggestion) => {
-    const newSection = {
-      id: suggestion.id,
-      title: suggestion.title,
-      type: 'list',
-      items: []
-    };
-    
-    // Check if section already exists
-    if (currentResume.sections.some(s => s.id === suggestion.id)) {
-      alert('Section already exists!');
-      return;
+  const handleAddCustom = () => {
+    if (customTitle.trim()) {
+      dispatch(addCustomSection({ title: customTitle, type: 'list' }));
+      setCustomTitle('');
+      setShowCustomInput(false);
     }
-
-    const updatedSections = [...currentResume.sections, newSection];
-    dispatch(updateSectionOrder(updatedSections));
-    setSuggestions(suggestions.filter(s => s.id !== suggestion.id));
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-2xl font-bold text-slate-800">Dynamic Advisor</h3>
-          <p className="text-slate-500 text-sm">Strategic recommendations for your professional level.</p>
-        </div>
-        <button 
-          onClick={handleGetSuggestions}
-          disabled={loading}
-          className="btn-secondary text-xs px-4 py-2 border-primary-100 text-primary-600"
-        >
-          {loading ? <RefreshCw className="animate-spin" size={12} /> : <Compass size={14} />}
-          Get Strategy
-        </button>
+    <div className="space-y-10 pb-20">
+      <div>
+        <h3 className="text-2xl font-bold text-slate-800">Add Sections</h3>
+        <p className="text-slate-500 text-sm">Choose from industry-standard sections or create your own.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {suggestions.map((s) => (
-          <div key={s.id} className="card-premium p-6 border-slate-100 bg-white group hover:border-primary-200 transition-all border-l-4 border-l-primary-500">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 bg-primary-50 text-primary-600 rounded-xl flex items-center justify-center">
-                <Sparkles size={20} />
+        {STANDARD_SECTIONS.map((s) => {
+          const isAdded = currentResume.sections.some(existing => existing.id === s.id);
+          return (
+            <div 
+              key={s.id} 
+              className={`p-5 rounded-2xl border-2 transition-all group ${
+                isAdded ? 'border-primary-100 bg-primary-50/30 opacity-60' : 'border-slate-100 bg-white hover:border-primary-200 shadow-sm'
+              }`}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isAdded ? 'bg-primary-100 text-primary-600' : 'bg-slate-50 text-slate-400 group-hover:bg-primary-50 group-hover:text-primary-600'}`}>
+                  <s.icon size={20} />
+                </div>
+                {!isAdded && (
+                  <button 
+                    onClick={() => handleAddSection(s)}
+                    className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center hover:scale-110 transition-transform"
+                  >
+                    <Plus size={18} />
+                  </button>
+                )}
+                {isAdded && (
+                  <div className="text-primary-600 font-bold text-xs uppercase tracking-widest px-2 py-1 bg-white rounded-lg border border-primary-100">
+                    Added
+                  </div>
+                )}
               </div>
-              <button 
-                onClick={() => addSection(s)}
-                className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-primary-600 hover:text-white flex items-center justify-center transition-all"
-              >
-                <Plus size={18} />
-              </button>
+              <h4 className="font-bold text-slate-900">{s.title}</h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">{s.description}</p>
             </div>
-            <h4 className="font-bold text-slate-900 group-hover:text-primary-600 transition-colors">{s.title}</h4>
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed">{s.description}</p>
-          </div>
-        ))}
-      </div>
+          );
+        })}
 
-      {suggestions.length === 0 && !loading && (
-        <div className="bg-slate-50 rounded-2xl p-8 border border-dashed border-slate-200 text-center">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100 text-slate-300">
-            <Compass size={32} />
-          </div>
-          <p className="text-slate-400 font-bold mb-4">Click "Get Strategy" to see section recommendations.</p>
+        {/* Custom Section Card */}
+        {!showCustomInput ? (
           <button 
-            onClick={handleGetSuggestions}
-            className="btn-primary mx-auto"
+            onClick={() => setShowCustomInput(true)}
+            className="p-5 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center text-slate-400 hover:border-primary-400 hover:text-primary-600 hover:bg-primary-50 transition-all min-h-[160px]"
           >
-            Run AI Analysis
+            <PlusCircle size={32} className="mb-3" />
+            <span className="font-bold">Add Custom Section</span>
           </button>
-        </div>
-      )}
-
-      {loading && (
-        <div className="space-y-4">
-          <div className="h-32 bg-slate-50 animate-pulse rounded-2xl" />
-          <div className="h-32 bg-slate-50 animate-pulse rounded-2xl" />
-        </div>
-      )}
+        ) : (
+          <div className="p-5 rounded-2xl border-2 border-primary-400 bg-primary-50 flex flex-col justify-between min-h-[160px] animate-fade-in">
+             <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-bold text-primary-900">New Custom Section</h4>
+                  <button onClick={() => setShowCustomInput(false)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+                </div>
+                <input 
+                  autoFocus
+                  type="text" 
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  placeholder="e.g. Exhibitions, References"
+                  className="w-full bg-white border border-primary-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddCustom()}
+                />
+             </div>
+             <button 
+              onClick={handleAddCustom}
+              className="btn-primary w-full mt-4"
+             >
+               Create Section
+             </button>
+          </div>
+        )}
+      </div>
 
       <div className="p-6 bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl text-white shadow-xl relative overflow-hidden">
         <div className="relative z-10 flex gap-4">
@@ -112,9 +133,9 @@ const ResumeAdvisor = () => {
             <Lightbulb className="text-amber-400" size={24} />
           </div>
           <div>
-            <h5 className="font-bold text-lg mb-2">Did you know?</h5>
+            <h5 className="font-bold text-lg mb-2">Structure Matters</h5>
             <p className="text-sm text-indigo-100 leading-relaxed font-light">
-              Including a <strong>Projects</strong> section is the #1 way for entry-level developers to overcome the "lack of experience" hurdle in ATS filters.
+              For tech roles, <strong>Projects</strong> should come immediately after Skills. For executive roles, <strong>Awards</strong> and <strong>Certifications</strong> carry more weight. Organize your sections based on your target seniority.
             </p>
           </div>
         </div>

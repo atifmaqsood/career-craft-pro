@@ -8,7 +8,7 @@ const MinimalTemplate = ({ data }) => {
 
   return (
     <div 
-      className="h-full bg-white p-16 flex flex-col"
+      className="bg-white p-16 flex flex-col min-h-full"
       style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
     >
       <header className="mb-14">
@@ -26,7 +26,7 @@ const MinimalTemplate = ({ data }) => {
         <section>
           <div className="flex">
             <h2 className="w-32 shrink-0 text-[11px] font-bold text-slate-300 uppercase tracking-[0.2em]">Summary</h2>
-            <p className="flex-1 text-slate-600 leading-relaxed font-light">{basics.summary || 'Summary goes here...'}</p>
+            <div className="flex-1 text-slate-600 leading-relaxed font-light whitespace-pre-wrap">{basics.summary || 'Summary goes here...'}</div>
           </div>
         </section>
 
@@ -41,12 +41,33 @@ const MinimalTemplate = ({ data }) => {
                     <span className="text-[10px] text-slate-400 tabular-nums">{item.startDate} — {item.endDate}</span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-1 uppercase tracking-wider">{item.position}</p>
-                  <p className="mt-4 text-sm text-slate-500 font-light leading-relaxed">{item.description}</p>
+                  <div className="mt-4 text-sm text-slate-500 font-light leading-relaxed whitespace-pre-wrap">
+                    {item.description}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
+
+        {/* Dynamic Sections */}
+        {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
+          <section key={section.id}>
+            <div className="flex">
+              <h2 className="w-32 shrink-0 text-[11px] font-bold text-slate-300 uppercase tracking-[0.2em]">{section.title}</h2>
+              <div className="flex-1 space-y-8">
+                {section.items.map((item, i) => (
+                  <div key={i}>
+                    <h3 className="text-sm font-semibold text-slate-800">{item.title}</h3>
+                    <div className="mt-2 text-sm text-slate-500 font-light leading-relaxed whitespace-pre-wrap">
+                      {item.content || item.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        ))}
 
         <section>
           <div className="flex">

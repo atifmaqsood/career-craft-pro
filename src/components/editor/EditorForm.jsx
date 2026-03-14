@@ -38,7 +38,8 @@ import {
   setSkills,
   updateSectionOrder,
   addSectionItem,
-  removeSectionItem
+  removeSectionItem,
+  removeSection
 } from '../../store/slices/resumeSlice';
 
 const SortableSection = ({ id, children }) => {
@@ -69,12 +70,23 @@ const SortableSection = ({ id, children }) => {
   );
 };
 
-const SectionHeader = ({ title, icon: Icon }) => (
-  <div className="flex items-center gap-3 mb-6 pb-2 border-b border-slate-100 mt-10 first:mt-0">
-    <div className="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center">
-      <Icon size={18} />
+const SectionHeader = ({ id, title, icon: Icon, onRemove }) => (
+  <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-100 mt-10 first:mt-0">
+    <div className="flex items-center gap-3">
+      <div className="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center">
+        <Icon size={18} />
+      </div>
+      <h3 className="text-xl font-bold text-slate-800">{title}</h3>
     </div>
-    <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+    {onRemove && (
+      <button 
+        onClick={() => onRemove(id)}
+        className="text-slate-300 hover:text-red-500 transition-colors p-1"
+        title="Remove entire section"
+      >
+        <Trash2 size={16} />
+      </button>
+    )}
   </div>
 );
 
@@ -340,7 +352,12 @@ const EditorForm = () => {
         >
           {sections.map((section) => (
             <SortableSection key={section.id} id={section.id}>
-              <SectionHeader title={section.title} icon={getIcon(section.id)} />
+              <SectionHeader 
+                id={section.id}
+                title={section.title} 
+                icon={getIcon(section.id)} 
+                onRemove={!['basics', 'experience', 'education', 'skills'].includes(section.id) ? (id) => dispatch(removeSection(id)) : null}
+              />
               {renderSectionContent(section)}
             </SortableSection>
           ))}

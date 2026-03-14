@@ -8,11 +8,11 @@ const CreativeTemplate = ({ data }) => {
 
   return (
     <div 
-      className="h-full bg-white flex"
+      className="bg-white flex min-h-full"
       style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
     >
       <div 
-        className="w-[120px] h-full flex flex-col items-center py-10 gap-12"
+        className="w-[120px] min-h-full flex flex-col items-center py-10 gap-12 shrink-0"
         style={{ backgroundColor: settings.color }}
       >
         <div className="w-16 h-16 rounded-full border-2 border-white/50 flex items-center justify-center text-white font-black text-2xl">
@@ -28,7 +28,7 @@ const CreativeTemplate = ({ data }) => {
         </div>
       </div>
 
-      <div className="flex-1 p-12 overflow-hidden">
+      <div className="flex-1 p-12">
         <header className="mb-12">
           <h1 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">{basics.name || 'Your Name'}</h1>
           <p className="text-xl font-bold mt-2" style={{ color: settings.color }}>Expert UI/UX Designer</p>
@@ -40,9 +40,9 @@ const CreativeTemplate = ({ data }) => {
         </header>
 
         <section className="mb-10">
-          <p className="text-lg text-slate-600 font-medium leading-relaxed border-l-4 pl-6" style={{ borderColor: settings.color }}>
+          <div className="text-lg text-slate-600 font-medium leading-relaxed border-l-4 pl-6 whitespace-pre-wrap" style={{ borderColor: settings.color }}>
             {basics.summary || 'Summary goes here...'}
-          </p>
+          </div>
         </section>
 
         <div className="grid grid-cols-5 gap-10">
@@ -55,10 +55,29 @@ const CreativeTemplate = ({ data }) => {
                     <div className="h-px flex-1 bg-slate-100 group-hover:bg-primary-100 transition-colors" />
                   </div>
                   <p className="text-xs font-bold text-slate-400 mt-1 uppercase">{item.company} | {item.startDate} - {item.endDate}</p>
-                  <p className="mt-3 text-sm text-slate-600">{item.description}</p>
+                  <div className="mt-3 text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">
+                    {item.description}
+                  </div>
                 </div>
               ))}
             </div>
+
+            {/* Dynamic Sections */}
+            {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
+              <div key={section.id} className="pt-8">
+                <h2 className="font-black text-slate-900 uppercase tracking-widest text-xs mb-6 border-b-2 border-slate-900 pb-2">{section.title}</h2>
+                <div className="space-y-6">
+                  {section.items.map((item, i) => (
+                    <div key={i}>
+                      <h3 className="font-black text-slate-800 uppercase tracking-tight text-sm">{item.title}</h3>
+                      <div className="mt-2 text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">
+                        {item.content || item.description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="col-span-2 space-y-10">

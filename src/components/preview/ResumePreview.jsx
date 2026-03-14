@@ -7,6 +7,7 @@ import MinimalTemplate from './templates/MinimalTemplate';
 
 const ResumePreview = () => {
   const { currentResume } = useSelector(state => state.resume);
+  console.log(`[ResumePreview] Rendering with data:`, currentResume);
   const { templateId } = currentResume;
 
   const renderTemplate = () => {
@@ -25,7 +26,7 @@ const ResumePreview = () => {
   };
 
   return (
-    <div id="resume-preview" className="resume-preview-container overflow-hidden">
+    <div id="resume-preview" className="resume-preview-container overflow-visible">
       {renderTemplate()}
     </div>
   );

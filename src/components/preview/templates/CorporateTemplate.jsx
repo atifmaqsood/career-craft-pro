@@ -8,7 +8,7 @@ const CorporateTemplate = ({ data }) => {
 
   return (
     <div 
-      className="h-full bg-white p-12 flex flex-col"
+      className="bg-white p-12 flex flex-col min-h-full"
       style={{ fontFamily: settings.font, fontSize: settings.spacing === 'compact' ? '0.8rem' : settings.spacing === 'relaxed' ? '1rem' : '0.9rem' }}
     >
       <div className="text-center border-b-2 border-slate-900 pb-8 mb-8">
@@ -22,24 +22,43 @@ const CorporateTemplate = ({ data }) => {
 
       <section className="mb-8">
         <h2 className="text-sm font-bold uppercase tracking-[0.3em] mb-4 text-center text-slate-900 border-b border-slate-100 pb-2">Professional Profile</h2>
-        <p className="text-slate-700 leading-relaxed text-center max-w-2xl mx-auto italic">{basics.summary || 'Summary goes here...'}</p>
+        <div className="text-slate-700 leading-relaxed text-center max-w-2xl mx-auto italic whitespace-pre-wrap">{basics.summary || 'Summary goes here...'}</div>
       </section>
 
       <section className="mb-8">
-        <h2 className="text-sm font-bold uppercase tracking-[0.3em] mb-4 text-slate-900 border-b border-slate-900 pb-1 w-fit">Experience</h2>
-        <div className="space-y-6 mt-4">
+        <h2 className="text-sm font-bold uppercase tracking-widest border-b border-slate-200 pb-1 mb-4" style={{ color: settings.color }}>Experience</h2>
+        <div className="space-y-6">
           {experience.map((item, i) => (
             <div key={i}>
               <div className="flex justify-between items-baseline">
-                <h3 className="font-bold text-slate-900 text-lg">{item.company}</h3>
-                <span className="text-xs font-bold text-slate-500 italic">{item.startDate} - {item.endDate}</span>
+                <h3 className="font-bold text-slate-800">{item.company}</h3>
+                <span className="text-xs font-bold text-slate-500">{item.startDate} - {item.endDate}</span>
               </div>
-              <div className="text-sm font-bold text-slate-600 mt-1 uppercase tracking-wider">{item.position}</div>
-              <p className="mt-2 text-sm text-slate-700 leading-relaxed">{item.description}</p>
+              <p className="text-sm font-semibold text-slate-600 italic mt-0.5">{item.position}</p>
+              <div className="mt-2 text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
+                {item.description}
+              </div>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Dynamic Sections */}
+      {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
+        <section key={section.id} className="mt-8">
+          <h2 className="text-sm font-bold uppercase tracking-widest border-b border-slate-200 pb-1 mb-4" style={{ color: settings.color }}>{section.title}</h2>
+          <div className="space-y-4">
+            {section.items.map((item, i) => (
+              <div key={i}>
+                <h3 className="font-bold text-slate-800 text-sm">{item.title}</h3>
+                <div className="text-xs text-slate-600 mt-1 whitespace-pre-wrap leading-relaxed">
+                  {item.content || item.description}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
 
       <div className="grid grid-cols-2 gap-10">
         <section>

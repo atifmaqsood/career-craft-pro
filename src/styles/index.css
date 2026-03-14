@@ -51,6 +51,25 @@
 
 /* Resume Preview Styles */
 .resume-preview-container {
-  aspect-ratio: 1 / 1.414; /* A4 aspect ratio */
-  @apply bg-white shadow-2xl mx-auto;
+  width: 210mm; /* A4 Width */
+  min-height: 297mm; /* Minimum A4 Height */
+  @apply bg-white shadow-2xl mx-auto p-[15mm] relative overflow-hidden;
+  /* Disable fixed aspect ratio to allow multi-page content flow */
+}
+
+/* Visualization of pages in the editor */
+.resume-page-wrapper {
+  background-color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+  .resume-preview-container {
+    width: 210mm;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
 }

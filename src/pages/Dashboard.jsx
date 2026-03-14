@@ -124,19 +124,22 @@ const Dashboard = () => {
     setIsImporting(true);
     try {
       const extractedData = await resumeParser.parseFile(file);
+      console.log(`[Dashboard] Data received from parser:`, extractedData);
+      
       const newResume = {
         id: crypto.randomUUID(),
         title: `Imported - ${file.name.split('.')[0]}`,
         templateId: 'modern',
         basics: extractedData.basics,
-        sections: [
-          { id: 'basics', title: 'Personal Info', type: 'basics' },
-          { id: 'experience', title: 'Experience', type: 'list', items: extractedData.experience },
-          { id: 'education', title: 'Education', type: 'list', items: extractedData.education },
-          { id: 'skills', title: 'Skills', type: 'tags', items: extractedData.skills }
-        ],
+        sections: extractedData.sections.map(s => ({
+          id: s.id,
+          title: s.title,
+          type: s.type,
+          items: s.items || []
+        })),
         settings: { color: '#0ea5e9', font: 'Inter', spacing: 'medium' }
       };
+      
       mockDatabaseService.saveResume(newResume);
       dispatch(setResume(newResume));
       navigate(`/editor/${newResume.id}`);
