@@ -77,6 +77,21 @@ const resumeSlice = createSlice({
     },
     setTemplate: (state, action) => {
       state.currentResume.templateId = action.payload;
+    },
+    addSectionItem: (state, action) => {
+      const { sectionId, item } = action.payload;
+      const section = state.currentResume.sections.find(s => s.id === sectionId);
+      if (section) {
+        if (!section.items) section.items = [];
+        section.items.push({ id: crypto.randomUUID(), ...item });
+      }
+    },
+    removeSectionItem: (state, action) => {
+      const { sectionId, itemId } = action.payload;
+      const section = state.currentResume.sections.find(s => s.id === sectionId);
+      if (section) {
+        section.items = section.items.filter(i => i.id !== itemId);
+      }
     }
   }
 });
@@ -93,7 +108,9 @@ export const {
   updateEducation,
   removeEducation,
   setSkills,
-  setTemplate
+  setTemplate,
+  addSectionItem,
+  removeSectionItem
 } = resumeSlice.actions;
 
 export default resumeSlice.reducer;

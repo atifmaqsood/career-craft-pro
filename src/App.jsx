@@ -6,6 +6,7 @@ import { setUser, setAnalytics } from './store/slices/userSlice';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Editor from './pages/Editor';
+import PublicResume from './pages/PublicResume';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="editor/:id?" element={<Editor />} />
       </Route>
+      <Route path="/share/:id" element={<PublicResume />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

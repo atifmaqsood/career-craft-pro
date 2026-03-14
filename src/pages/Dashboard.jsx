@@ -60,8 +60,15 @@ const ResumeCard = ({ resume, onDelete }) => {
           >
             <Eye size={20} />
           </button>
-          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary-600 shadow-xl hover:scale-110 transition-transform">
-            <Download size={20} />
+          <button 
+            onClick={() => {
+              const url = `${window.location.origin}/share/${resume.id}`;
+              navigator.clipboard.writeText(url);
+              alert('Public link copied to clipboard!');
+            }}
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary-600 shadow-xl hover:scale-110 transition-transform"
+          >
+            <Share2 size={20} />
           </button>
         </div>
       </div>

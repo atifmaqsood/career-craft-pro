@@ -49,6 +49,21 @@ const ModernTemplate = ({ data }) => {
               ))}
             </div>
           </section>
+
+          {/* Dynamic Sections */}
+          {sections.filter(s => !['basics', 'experience', 'education', 'skills'].includes(s.id)).map(section => (
+            <section key={section.id} className="mt-8">
+              <h2 className="text-sm font-bold uppercase tracking-widest mb-4" style={{ color: settings.color }}>{section.title}</h2>
+              <div className="space-y-4">
+                {section.items.map((item, i) => (
+                  <div key={i}>
+                    <h3 className="font-bold text-slate-800 text-sm">{item.title}</h3>
+                    <p className="text-xs text-slate-600 mt-1">{item.content}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
 
         {/* Right Column */}
